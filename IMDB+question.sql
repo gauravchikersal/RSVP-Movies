@@ -93,9 +93,11 @@ We know USA and India produces huge number of movies each year. Lets find the nu
   
 -- Q4. How many movies were produced in the USA or India in the year 2019??
 -- Type your code below:
-select count(*) as number_of_movies
-from movie
-where country in ("USA" OR "INDIA") and year= 2019;
+SELECT 
+    COUNT(*) AS number_of_movies
+FROM
+    movie
+WHERE year=2019 AND (LOWER(country) LIKE '%usa%' OR LOWER(country) LIKE '%india%');
 
 
 
@@ -126,14 +128,10 @@ Combining both the movie and genres table can give more interesting insights. */
 
 -- Q6.Which genre had the highest number of movies produced overall?
 -- Type your code below:
-select genre,count(movie_id) as num_of_movies from genre as g
-inner join movie as m
-on g.movie_id=m.id
-
+select max(movie_id) movie_count,genre
+from genre
 group by genre
-order by num_of_movies desc
-limit 1 ; 
-
+order by movie_count desc limit 1;
 
 
 
