@@ -93,11 +93,9 @@ We know USA and India produces huge number of movies each year. Lets find the nu
   
 -- Q4. How many movies were produced in the USA or India in the year 2019??
 -- Type your code below:
-select count(id) as number_of_movies, year from movie
-where country='USA' or country='India'
-group by country
-having year=2019 ;
-
+select count(*) as number_of_movies
+from movie
+where country in ("USA" OR "INDIA") and year= 2019;
 
 
 
