@@ -452,14 +452,24 @@ order by median_rating ;
 -- Hint: Here you have to find the total number of votes for both German and Italian movies.
 -- Type your code below:
 
-select total_votes,languages
-from movie as m
-inner join
-ratings as r
-on m.id=r.movie_id
-where languages like 'German' or languages like 'Italian'
-group by languages 
-order by total_votes desc ;
+WITH votes_summary AS
+(
+SELECT 
+	COUNT(CASE WHEN LOWER(m.languages) LIKE '%german%' THEN m.id END) AS german_movie_count,
+	COUNT(CASE WHEN LOWER(m.languages) LIKE '%italian%' THEN m.id END) AS italian_movie_count,
+	SUM(CASE WHEN LOWER(m.languages) LIKE '%german%' THEN r.total_votes END) AS german_movie_votes,
+	SUM(CASE WHEN LOWER(m.languages) LIKE '%italian%' THEN r.total_votes END) AS italian_movie_votes
+FROM
+    movie AS m 
+	    INNER JOIN
+	ratings AS r 
+		ON m.id = r.movie_id
+)
+SELECT 
+    ROUND(german_movie_votes / german_movie_count, 2) AS german_votes_per_movie,
+    ROUND(italian_movie_votes / italian_movie_count, 2) AS italian_votes_per_movie
+FROM
+    votes_summary;
 
 
 
